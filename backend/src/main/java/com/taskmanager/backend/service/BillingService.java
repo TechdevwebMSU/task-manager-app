@@ -13,9 +13,13 @@ public class BillingService {
     @Autowired
     private BillingDataRepository billingDataRepository;
 
+    @Autowired
+    private SequenceGeneratorService sequenceGenerator;
+
     public List<BillingData> saveBillingDataBatch(List<BillingData> billingDataList, String taskRunId) {
         for (BillingData data : billingDataList) {
             data.setTaskRunId(taskRunId);
+            data.setId(sequenceGenerator.generateSequence("billingData_sequence"));
         }
         return billingDataRepository.saveAll(billingDataList);
     }
@@ -23,4 +27,4 @@ public class BillingService {
     public List<BillingData> getBillingDataByTaskRunId(String taskRunId) {
         return billingDataRepository.findByTaskRunId(taskRunId);
     }
-}
+} 
